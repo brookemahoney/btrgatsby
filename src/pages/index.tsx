@@ -4,23 +4,42 @@ import {
   Link,
   PageProps
 } from "gatsby"
+import Band from "../templates/band";
+
+type Band = {
+  id: string,
+  path: { alias: string },
+  relationships: {
+    field_image: {
+      relationships: {
+        field_media_image: {
+          uri: {
+            url: string,
+          },
+        },
+      },
+      field_media_image: {
+        alt: string,
+      },
+    },
+  },
+  title: string,
+};
 
 type DataProps = {
   site: {
     siteMetadata: {
+      siteUrl: string,
       title: string,
     },
   },
   allNodeBand: {
-    nodes: [{
-      id: string,
-      path: { alias: string },
-      title: string,
-    }],
+    nodes: [Band],
   },
 };
 
 const IndexRoute = ({ data: { site, allNodeBand: { nodes: bands } } }: PageProps<DataProps>) => {
+  const siteUrl = site.siteMetadata.siteUrl;
   return (
     <main>
       <h1>{site.siteMetadata.title}</h1>
@@ -29,6 +48,11 @@ const IndexRoute = ({ data: { site, allNodeBand: { nodes: bands } } }: PageProps
         {bands.map(band => (
           <li key={band.id}>
             <Link to={ band.path.alias }>
+              <img
+                alt={ band.relationships.field_image.field_media_image.alt }
+                src={ `${siteUrl}/${ band.relationships.field_image.relationships.field_media_image.uri.url }` }
+              />
+              <br />
               { band.title }
             </Link>
           </li>
@@ -44,6 +68,7 @@ export const query = graphql`
   {
     site {
       siteMetadata {
+        siteUrl
         title
       }
     },
@@ -53,8 +78,22 @@ export const query = graphql`
         path {
           alias
         }
+        relationships {
+          field_image {
+            relationships {
+              field_media_image {
+                uri {
+                  url
+                }
+              }
+            }
+            field_media_image {
+              alt
+            }
+          }
+        }
         title
       }
-    }
+    },
   }
 `
