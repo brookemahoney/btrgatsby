@@ -16,6 +16,9 @@ const config: GatsbyConfig = {
         baseUrl: `https://btr10.ddev.site/`,
       },
     },
+    `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
   ],
 };
 

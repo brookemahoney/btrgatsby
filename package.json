@@ -17,7 +17,12 @@
   },
   "dependencies": {
     "gatsby": "^5",
+    "gatsby-plugin-image": "^3",
+    "gatsby-plugin-sharp": "^5",
     "gatsby-source-drupal": "^6",
+    "gatsby-source-filesystem": "^5",
+    "gatsby-transformer-sharp": "^5",
+    "polished": "^4.3.1",
     "react": "^18",
     "react-dom": "^18",
     "styled-components": "^6"

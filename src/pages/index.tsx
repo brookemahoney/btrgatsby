@@ -1,64 +1,91 @@
-import * as React from "react"
+import React from 'react';
 import {
   graphql,
   Link,
   PageProps
-} from "gatsby"
-import Band from "../templates/band";
+} from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import { styled } from 'styled-components';
+import PageWrapper from '../components/PageWrapper';
+import { TSBand } from '../ducks/band';
 
-type Band = {
-  id: string,
-  path: { alias: string },
-  relationships: {
-    field_image: {
-      relationships: {
-        field_media_image: {
-          uri: {
-            url: string,
-          },
-        },
-      },
-      field_media_image: {
-        alt: string,
-      },
-    },
-  },
-  title: string,
-};
 
 type DataProps = {
   site: {
     siteMetadata: {
       siteUrl: string,
-      title: string,
     },
   },
   allNodeBand: {
-    nodes: [Band],
+    nodes: [TSBand],
   },
 };
+
+const BandsGridStyled = styled.div`
+  text-align: center;
+
+  li {
+    list-style: none;
+    padding: 10px;
+    max-width: 240px;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const BandTeaserWrapper = styled.div<{ backgroundColor: string }>`
+  align-items: center;
+  border: 10px solid #ff5400;
+  border-radius: 10px;
+  display: flex;
+  min-height: 240px;
+
+  &:hover {
+    border-color: #FFFF00;
+  }
+
+  img {
+    border-radius: 2px;
+  }
+`;
+
+const BandTitleStyled = styled.div`
+  padding: 5px;
+`;
 
 const IndexRoute = ({ data: { site, allNodeBand: { nodes: bands } } }: PageProps<DataProps>) => {
   const siteUrl = site.siteMetadata.siteUrl;
   return (
-    <main>
-      <h1>{site.siteMetadata.title}</h1>
-      <h2>Bands</h2>
-      <ul>
-        {bands.map(band => (
-          <li key={band.id}>
-            <Link to={ band.path.alias }>
-              <img
-                alt={ band.relationships.field_image.field_media_image.alt }
-                src={ `${siteUrl}/${ band.relationships.field_image.relationships.field_media_image.uri.url }` }
-              />
-              <br />
-              { band.title }
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </main>
+    <PageWrapper>
+      <main>
+        <BandsGridStyled>
+          <ul>
+            {bands.map(band => {
+              const image = getImage(band.relationships.field_image.relationships.field_media_image.localFile);
+              return (
+                <li key={band.id}>
+                  <Link to={ band.path.alias }>
+                    <BandTeaserWrapper backgroundColor={image?.backgroundColor}>
+                      <div>
+                        <GatsbyImage image={image} alt={band.relationships.field_image.field_media_image.alt} />
+                        <BandTitleStyled>
+                          { band.title }
+                        </BandTitleStyled>
+                      </div>
+                    </BandTeaserWrapper>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </BandsGridStyled>
+      </main>
+    </PageWrapper>
   );
 };
 
@@ -84,6 +111,11 @@ export const query = graphql`
               field_media_image {
                 uri {
                   url
+                }
+                localFile {
+                  childImageSharp {
+                    gatsbyImageData(width: 240)
+                  }
                 }
               }
             }
