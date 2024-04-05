@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { StaticImage } from 'gatsby-plugin-image';
+import { Link } from 'gatsby';
 
 const PageWrapperStyled = styled.div`
   a {
@@ -19,7 +20,9 @@ const LogoWrapperStyled = styled.div`
 const PageWrapper = ({ children } : { children: React.ReactNode }) => (
   <PageWrapperStyled>
     <LogoWrapperStyled>
-      <StaticImage src="../images/logo.png" alt="Burning Token Records" />
+      <Link to='/'>
+        <StaticImage src="../images/logo.png" alt="Burning Token Records" />
+      </Link>
     </LogoWrapperStyled>
     { children }
   </PageWrapperStyled>

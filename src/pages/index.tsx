@@ -38,7 +38,7 @@ const BandsGridStyled = styled.div`
   }
 `;
 
-const BandTeaserWrapper = styled.div<{ backgroundColor: string }>`
+const BandTeaserWrapper = styled.div`
   align-items: center;
   border: 10px solid #ff5400;
   border-radius: 10px;
@@ -70,9 +70,9 @@ const IndexRoute = ({ data: { site, allNodeBand: { nodes: bands } } }: PageProps
               return (
                 <li key={band.id}>
                   <Link to={ band.path.alias }>
-                    <BandTeaserWrapper backgroundColor={image?.backgroundColor}>
+                    <BandTeaserWrapper>
                       <div>
-                        <GatsbyImage image={image} alt={band.relationships.field_image.field_media_image.alt} />
+                        { image && <GatsbyImage image={image} alt={band.relationships.field_image.field_media_image.alt} /> }
                         <BandTitleStyled>
                           { band.title }
                         </BandTitleStyled>
