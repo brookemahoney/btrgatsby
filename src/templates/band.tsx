@@ -4,6 +4,7 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import styled from 'styled-components';
 import { TSBandResponse, getBandFromResponse } from '../ducks/band';
 import PageWrapper from '../components/PageWrapper';
+import YouTubeVideo from '../components/YoutubeVideo';
 
 type TSProps = { data: { nodeBand: TSBandResponse } };
 
@@ -34,6 +35,10 @@ const ReleaseStyled = styled.div`
 
 const ReleaseBodyStyled = styled.div``;
 
+const VideosStyled = ReleasesStyled;
+
+const VideoStyled = ReleaseStyled;
+
 const Band = ({ data: { nodeBand: bandResponse } }: TSProps) => {
   const band = getBandFromResponse(bandResponse);
   const bandImage = getImage(band.image.localFile);
@@ -45,21 +50,40 @@ const Band = ({ data: { nodeBand: bandResponse } }: TSProps) => {
           <GatsbyImage image={bandImage} alt={band.image.alt} />
         )}
         <BodyStyled dangerouslySetInnerHTML={{ __html: band.body }} />
-        <h2>Releases</h2>
-        <ReleasesStyled>
-          {band.releases.map(release => {
-            const releaseImage = getImage(release.image.localFile);
-            return (
-              <ReleaseStyled key={release.id}>
-                <h3>{release.title}</h3>
-                {releaseImage && (
-                  <GatsbyImage image={releaseImage} alt={release.image.alt} />
-                )}
-                <ReleaseBodyStyled dangerouslySetInnerHTML={{ __html: release.body }} />
-              </ReleaseStyled>
-            );
-          })}
-        </ReleasesStyled>
+        {band.releases.length > 0 && (
+          <>
+            <h2>Releases</h2>
+            <ReleasesStyled>
+              {band.releases.map(release => {
+                const releaseImage = getImage(release.image.localFile);
+                return (
+                  <ReleaseStyled key={release.id}>
+                    <h3>{release.title}</h3>
+                    {releaseImage && (
+                      <GatsbyImage image={releaseImage} alt={release.image.alt} />
+                    )}
+                    <ReleaseBodyStyled dangerouslySetInnerHTML={{ __html: release.body }} />
+                  </ReleaseStyled>
+                );
+              })}
+            </ReleasesStyled>
+          </>
+        )}
+        {band.videos.length > 0 && (
+          <>
+            <h2>Videos</h2>
+            <VideosStyled>
+              {band.videos.map(video => {
+                return (
+                  <VideoStyled>
+                    <h3>{video.title}</h3>
+                    <YouTubeVideo url={video.video} label={video.title} />
+                  </VideoStyled>
+                );
+              })}
+            </VideosStyled>
+          </>
+        )}
       </PageInnerStyled>
     </PageWrapper>
   );
@@ -119,6 +143,15 @@ export const query = graphql`
                   }
                 }
               }
+            }
+          }
+        }
+        field_videos {
+          id
+          title
+          relationships {
+            field_video {
+              field_media_oembed_video
             }
           }
         }

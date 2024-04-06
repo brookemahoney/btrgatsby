@@ -1,5 +1,6 @@
 import { TSFieldImage } from './fields';
 import { getReleaseFromResponse, TSRelease, TSReleaseResponse } from './release';
+import { getVideoFromResponse, TSVideo, TSVideoResponse } from './video';
 
 interface TSBandBaseResponse {
   id: string,
@@ -20,6 +21,7 @@ export interface TSBandResponse extends TSBandBaseResponse {
   relationships: {
     field_image: TSFieldImage,
     field_releases: TSReleaseResponse[],
+    field_videos: TSVideoResponse[],
   },
 };
 
@@ -36,6 +38,7 @@ export interface TSBandTeaser {
 export interface TSBand extends TSBandTeaser {
   body: string,
   releases: TSRelease[],
+  videos: TSVideo[],
 };
 
 export const getBandFromResponse = (response: TSBandResponse): TSBand => ({
@@ -48,6 +51,7 @@ export const getBandFromResponse = (response: TSBandResponse): TSBand => ({
     localFile: response.relationships.field_image.relationships.field_media_image.localFile,
   },
   releases: response.relationships.field_releases.map(getReleaseFromResponse),
+  videos: response.relationships.field_videos.map(getVideoFromResponse),
 });
 
 export const getBandTeaserFromResponse = (response: TSBandTeaserResponse): TSBandTeaser => ({
