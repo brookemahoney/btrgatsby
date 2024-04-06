@@ -1,5 +1,11 @@
+@font-face {
+  font-family: 'kingthings';
+  src: url('../fonts/kingthings-trypewriter-2.regular.ttf');
+}
+
 html {
   box-sizing: border-box;
+  font-family: kingthings;
   line-height: 1.5;
 }
 

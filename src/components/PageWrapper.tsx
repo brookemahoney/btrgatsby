@@ -17,14 +17,16 @@ const LogoWrapperStyled = styled.div`
   text-align: center;
 `;
 
-const PageWrapper = ({ children } : { children: React.ReactNode }) => (
+const PageWrapper = ({ children }: { children: React.ReactNode }) => (
   <PageWrapperStyled>
     <LogoWrapperStyled>
       <Link to='/'>
         <StaticImage src="../images/logo.png" alt="Burning Token Records" />
       </Link>
     </LogoWrapperStyled>
-    { children }
+    <main>
+      {children}
+    </main>
   </PageWrapperStyled>
 );
 

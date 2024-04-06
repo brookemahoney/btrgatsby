@@ -1,9 +1,11 @@
 import path from 'path';
+import type { GatsbyNode } from 'gatsby';
+import { TSBandResponse } from './src/ducks/band';
 
-exports.createPages = async ({ actions, graphql }) => {
+export const createPages: GatsbyNode["createPages"] = async ({ actions, graphql }) => {
   const { createPage } = actions;
 
-  const result = await graphql(`
+  const result:any = await graphql(`
     query {
       allNodeBand {
         nodes {
@@ -17,7 +19,7 @@ exports.createPages = async ({ actions, graphql }) => {
     }
   `);
 
-  result.data.allNodeBand.nodes.forEach(node => {
+  result.data.allNodeBand.nodes.forEach((node: TSBandResponse) => {
     createPage({
       path: node.path.alias,
       component: path.resolve('src/templates/band.tsx'),

@@ -7,7 +7,7 @@ import {
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import { styled } from 'styled-components';
 import PageWrapper from '../components/PageWrapper';
-import { TSBand } from '../ducks/band';
+import { getBandFromResponse, TSBandResponse } from '../ducks/band';
 
 
 type DataProps = {
@@ -17,7 +17,7 @@ type DataProps = {
     },
   },
   allNodeBand: {
-    nodes: [TSBand],
+    nodes: [TSBandResponse],
   },
 };
 
@@ -58,33 +58,32 @@ const BandTitleStyled = styled.div`
   padding: 5px;
 `;
 
-const IndexRoute = ({ data: { site, allNodeBand: { nodes: bands } } }: PageProps<DataProps>) => {
+const IndexRoute = ({ data: { site, allNodeBand: { nodes: bandsResponse } } }: PageProps<DataProps>) => {
   const siteUrl = site.siteMetadata.siteUrl;
+  const bands = bandsResponse.map(getBandFromResponse);
   return (
     <PageWrapper>
-      <main>
-        <BandsGridStyled>
-          <ul>
-            {bands.map(band => {
-              const image = getImage(band.relationships.field_image.relationships.field_media_image.localFile);
-              return (
-                <li key={band.id}>
-                  <Link to={ band.path.alias }>
-                    <BandTeaserWrapper>
-                      <div>
-                        { image && <GatsbyImage image={image} alt={band.relationships.field_image.field_media_image.alt} /> }
-                        <BandTitleStyled>
-                          { band.title }
-                        </BandTitleStyled>
-                      </div>
-                    </BandTeaserWrapper>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </BandsGridStyled>
-      </main>
+      <BandsGridStyled>
+        <ul>
+          {bands.map(band => {
+            const image = getImage(band.image.localFile);
+            return (
+              <li key={band.id}>
+                <Link to={ band.path }>
+                  <BandTeaserWrapper>
+                    <div>
+                      { image && <GatsbyImage image={image} alt={band.image.alt} /> }
+                      <BandTitleStyled>
+                        { band.title }
+                      </BandTitleStyled>
+                    </div>
+                  </BandTeaserWrapper>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </BandsGridStyled>
     </PageWrapper>
   );
 };
