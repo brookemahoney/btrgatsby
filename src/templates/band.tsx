@@ -40,6 +40,9 @@ export const query = graphql`
       body {
         processed
       }
+      path {
+        alias
+      }
       relationships {
         field_image {
           relationships {
@@ -55,31 +58,31 @@ export const query = graphql`
                 }
               }
             }
-            field_releases {
-              body {
-                processed
+          }
+          field_media_image {
+            alt
+          }
+        }
+        field_releases {
+          body {
+            processed
+          }
+          title
+          relationships {
+            field_image {
+              field_media_image {
+                alt
               }
-              title
               relationships {
-                field_image {
-                  field_media_image {
-                    alt
-                  }
-                  relationships {
-                    field_media_image {
-                      localFile {
-                        childrenImageSharp {
-                          gatsbyImageData(placeholder: BLURRED)
-                        }
-                      }
+                field_media_image {
+                  localFile {
+                    childrenImageSharp {
+                      gatsbyImageData(placeholder: BLURRED)
                     }
                   }
                 }
               }
             }
-          }
-          field_media_image {
-            alt
           }
         }
       }
