@@ -7,7 +7,7 @@ import {
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import { styled } from 'styled-components';
 import PageWrapper from '../components/PageWrapper';
-import { getBandFromResponse, TSBandResponse } from '../ducks/band';
+import { getBandTeaserFromResponse, TSBandTeaserResponse } from '../ducks/band';
 
 
 type DataProps = {
@@ -17,7 +17,7 @@ type DataProps = {
     },
   },
   allNodeBand: {
-    nodes: [TSBandResponse],
+    nodes: [TSBandTeaserResponse],
   },
 };
 
@@ -60,7 +60,7 @@ const BandTitleStyled = styled.div`
 
 const IndexRoute = ({ data: { site, allNodeBand: { nodes: bandsResponse } } }: PageProps<DataProps>) => {
   const siteUrl = site.siteMetadata.siteUrl;
-  const bands = bandsResponse.map(getBandFromResponse);
+  const bands = bandsResponse.map(getBandTeaserFromResponse);
   return (
     <PageWrapper>
       <BandsGridStyled>
